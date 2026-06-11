@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Workflow Automation Dashboard — Technical Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --border: #1f2d40;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --blue: #3b82f6;
+    --violet: #8b5cf6;
+    --emerald: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 14px;
+  }
+
+  /* ─── Cover Page ─── */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: linear-gradient(135deg, #0a0f1e 0%, #0f1f3d 50%, #0a0f1e 100%);
+    padding: 60px 40px;
+    page-break-after: always;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 20%, rgba(59,130,246,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,92,246,0.15) 0%, transparent 60%);
+  }
+  .cover-badge {
+    display: inline-block;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa;
+    padding: 6px 18px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .cover h1 {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 30%, #60a5fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+  .cover p.subtitle {
+    font-size: 18px;
+    color: #94a3b8;
+    max-width: 640px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 48px;
+  }
+  .tech-pill {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #cbd5e1;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .cover-meta {
+    position: relative;
+    color: #475569;
+    font-size: 13px;
+  }
+
+  /* ─── Layout ─── */
+  .page { page-break-before: always; }
+  .container { max-width: 900px; margin: 0 auto; padding: 60px 40px; }
+
+  /* ─── Section Headers ─── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 10px;
+    margin-top: 32px;
+  }
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+  p { color: #94a3b8; margin-bottom: 14px; }
+  .lead-text { font-size: 16px; color: #cbd5e1; line-height: 1.8; margin-bottom: 32px; }
+
+  /* ─── Cards / Boxes ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .card-blue  { border-color: rgba(59,130,246,0.3);  background: rgba(59,130,246,0.05); }
+  .card-violet{ border-color: rgba(139,92,246,0.3);  background: rgba(139,92,246,0.05); }
+  .card-emerald{border-color: rgba(16,185,129,0.3);  background: rgba(16,185,129,0.05); }
+  .card-amber { border-color: rgba(245,158,11,0.3);  background: rgba(245,158,11,0.05); }
+
+  /* ─── Diagram Images ─── */
+  .diagram {
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin: 28px 0;
+    display: block;
+  }
+  .diagram-caption {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: -16px;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  /* ─── Code Blocks ─── */
+  pre {
+    background: #020812;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: #a5f3fc;
+    overflow-x: auto;
+    margin: 16px 0 24px;
+    line-height: 1.8;
+  }
+  .kw { color: #c084fc; }
+  .str { color: #86efac; }
+  .comment { color: #475569; font-style: italic; }
+  .fn { color: #60a5fa; }
+  .num { color: #fb923c; }
+
+  /* ─── Tables ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0 32px;
+    font-size: 13px;
+  }
+  th {
+    background: #0f172a;
+    color: #60a5fa;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(30,41,59,0.5);
+    color: #94a3b8;
+    vertical-align: top;
+  }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge-post   { background: rgba(16,185,129,0.15);  color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+  .badge-get    { background: rgba(59,130,246,0.15);  color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); }
+  .badge-patch  { background: rgba(245,158,11,0.15);  color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+
+  /* ─── Event Flow ─── */
+  .event-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(30,41,59,0.4);
+  }
+  .event-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(59,130,246,0.15);
+    border: 1px solid rgba(59,130,246,0.3);
+    color: #60a5fa;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .event-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .event-blue   { background: rgba(59,130,246,0.15);  color: #60a5fa; }
+  .event-green  { background: rgba(16,185,129,0.15);  color: #34d399; }
+  .event-violet { background: rgba(139,92,246,0.15);  color: #a78bfa; }
+  .event-amber  { background: rgba(245,158,11,0.15);  color: #fbbf24; }
+
+  /* ─── Step Grid ─── */
+  .step-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .step-card {
+    background: #0d1526;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .step-icon { font-size: 24px; margin-bottom: 8px; }
+  .step-card h4 { margin-top: 0; color: #e2e8f0; }
+  .step-card p { font-size: 13px; margin-bottom: 0; }
+
+  /* ─── Deployment ─── */
+  .deploy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* ─── Divider ─── */
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  /* ─── Print ─── */
+  @media print {
+    body { background: #0a0f1e !important; }
+    .cover { page-break-after: always; min-height: auto; padding: 80px 60px; }
+    .page { page-break-before: always; }
+    pre { white-space: pre-wrap; word-break: break-all; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ COVER PAGE ══════════════ -->
+<div class="cover">
+  <div class="cover-badge">Technical Documentation</div>
+  <h1>AI Workflow Automation<br/>Dashboard</h1>
+  <p class="subtitle">
+    A production-grade, full-stack portfolio project showcasing real-time WebSockets,
+    MongoDB Atlas, RESTful APIs, and n8n integration.
+  </p>
+  <div class="tech-pills">
+    <span class="tech-pill">⚡ Next.js 16</span>
+    <span class="tech-pill">🟢 Node.js + Express</span>
+    <span class="tech-pill">🔌 Socket.IO</span>
+    <span class="tech-pill">🍃 MongoDB Atlas</span>
+    <span class="tech-pill">🔗 n8n Webhooks</span>
+    <span class="tech-pill">☁️ Render + Vercel</span>
+    <span class="tech-pill">📊 Recharts</span>
+    <span class="tech-pill">🎨 Tailwind CSS v4</span>
+  </div>
+  <div class="cover-meta">
+    Capstone Project &nbsp;·&nbsp; Full-Stack Development &nbsp;·&nbsp; 2024
+  </div>
+</div>
+
+<!-- ══════════════ SECTION 1: OVERVIEW ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 01</div>
+  <h2>Project Overview</h2>
+  <p class="lead-text">
+    The AI Workflow Automation Dashboard is a full-stack web application that monitors, triggers, and visualises automated business workflows in real time. It showcases five key engineering competencies in a single coherent system: backend API design, NoSQL database modelling, real-time bi-directional communication, third-party webhook integration, and cloud deployment.
+  </p>
+
+  <div class="step-grid">
+    <div class="step-card card-blue">
+      <div class="step-icon">🔧</div>
+      <h4>Backend Engineering</h4>
+      <p>Express.js REST API with full CRUD, middleware pipeline (CORS, Helmet, Morgan), environment-based config, and error handling.</p>
+    </div>
+    <div class="step-card card-violet">
+      <div class="step-icon">⚡</div>
+      <h4>Real-Time WebSockets</h4>
+      <p>Socket.IO bi-directional channel pushing live execution progress, log streams, and dashboard metric updates to all connected clients.</p>
+    </div>
+    <div class="step-card card-emerald">
+      <div class="step-icon">🍃</div>
+      <h4>MongoDB + Mongoose</h4>
+      <p>Four Mongoose models with schema validation, ObjectId references, aggregation pipelines for stats, and a seeding script for demo data.</p>
+    </div>
+    <div class="step-card card-amber">
+      <div class="step-icon">🔗</div>
+      <h4>n8n Webhook Integration</h4>
+      <p>Three HTTP webhook endpoints (/n8n, /email, /crm) that external n8n flows can POST to, triggering real workflow engine executions.</p>
+    </div>
+  </div>
+
+  <h3>Tech Stack At a Glance</h3>
+  <table>
+    <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Frontend</td><td>Next.js 16 (App Router)</td><td>Server-side rendering, file-based routing, React components</td></tr>
+    <tr><td>Styling</td><td>Tailwind CSS v4 + custom CSS</td><td>Glassmorphism dark-mode design system</td></tr>
+    <tr><td>Charts</td><td>Recharts</td><td>Bar charts, line charts for KPI and score distribution</td></tr>
+    <tr><td>API</td><td>Node.js + Express</td><td>RESTful endpoints, middleware pipeline, route organisation</td></tr>
+    <tr><td>Real-time</td><td>Socket.IO</td><td>WebSocket server (backend) and client (frontend)</td></tr>
+    <tr><td>Database</td><td>MongoDB Atlas + Mongoose</td><td>Persistent storage with schema validation and aggregation</td></tr>
+    <tr><td>Integration</td><td>n8n (external)</td><td>Workflow automation tool that calls our webhook endpoints</td></tr>
+    <tr><td>Deployment</td><td>Render (backend) + Vercel (frontend)</td><td>Production hosting with environment variable management</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 2: ARCHITECTURE ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 02</div>
+  <h2>System Architecture</h2>
+  <p class="lead-text">
+    The system follows a decoupled architecture. The Next.js frontend runs independently and communicates with the Express backend via two channels: a standard HTTP REST API for data fetching and mutations, and a persistent Socket.IO WebSocket connection for real-time server-pushed events.
+  </p>
+
+  <img class="diagram" src="images/architecture_diagram_1781169406420.png" alt="System Architecture Diagram" />
+  <p class="diagram-caption">Figure 1 — Full system architecture showing the three communication channels: REST API, WebSocket, and Webhook.</p>
+
+  <h3>Communication Channels</h3>
+
+  <div class="card card-blue" style="margin-bottom:16px">
+    <h4 style="color:#60a5fa;margin-top:0">① REST API (HTTP)</h4>
+    <p style="margin-bottom:0">Used for initial page loads, CRUD operations, and data queries. The frontend calls <code style="color:#a5f3fc">GET /api/workflows</code>, <code style="color:#a5f3fc">GET /api/leads</code>, etc. when a page first mounts. Mutations (triggering a workflow, pausing it) also go over REST. The response is always JSON.</p>
+  </div>
+
+  <div class="card card-violet" style="margin-bottom:16px">
+    <h4 style="color:#a78bfa;margin-top:0">② WebSocket (Socket.IO)</h4>
+    <p style="margin-bottom:0">A persistent connection established when the Next.js app loads. The backend engine emits named events (<code style="color:#a5f3fc">execution:progress</code>, <code style="color:#a5f3fc">log:new</code>, <code style="color:#a5f3fc">metrics:update</code>) that all connected browser tabs receive simultaneously — enabling multi-tab live sync without polling.</p>
+  </div>
+
+  <div class="card card-amber" style="margin-bottom:0">
+    <h4 style="color:#fbbf24;margin-top:0">③ Webhook (Inbound HTTP POST)</h4>
+    <p style="margin-bottom:0">External tools like n8n send HTTP POST requests to <code style="color:#a5f3fc">/api/webhooks/n8n</code>, <code style="color:#a5f3fc">/email</code>, or <code style="color:#a5f3fc">/crm</code>. The backend maps the source to a workflow type, finds an active workflow, creates an execution record, and runs the engine — all in response to a single external trigger.</p>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 3: WEBSOCKETS ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 03</div>
+  <h2>Real-Time WebSocket Flow</h2>
+  <p class="lead-text">
+    Socket.IO wraps the native WebSocket protocol and adds automatic reconnection, room management, and event namespacing. Here is exactly what happens from the moment a user clicks "Trigger Now" to when the dashboard KPIs update.
+  </p>
+
+  <img class="diagram" src="images/websocket_flow_1781169436250.png" alt="WebSocket Sequence Diagram" />
+  <p class="diagram-caption">Figure 2 — Step-by-step WebSocket event sequence for a single workflow execution.</p>
+
+  <h3>Socket.IO Event Reference</h3>
+  <div class="event-row">
+    <div class="event-num">1</div>
+    <div>
+      <span class="event-tag event-blue">execution:started</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted immediately after the engine begins. Payload: <code style="color:#a5f3fc">{ executionId, workflowId }</code>. Frontend creates the live step panel on the workflow card.</p>
+    </div>
+  </div>
+  <div class="event-row">
+    <div class="event-num">2</div>
+    <div>
+      <span class="event-tag event-violet">execution:progress</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted before and after each step. Payload: <code style="color:#a5f3fc">{ workflowId, step: { name, status, duration }, progress: 0–100 }</code>. Frontend animates the progress bar and step list.</p>
+    </div>
+  </div>
+  <div class="event-row">
+    <div class="event-num">3</div>
+    <div>
+      <span class="event-tag event-amber">log:new</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted for every log entry the engine creates. Payload: <code style="color:#a5f3fc">{ log: { level, message, createdAt } }</code>. The Live Logs page appends the entry and auto-scrolls.</p>
+    </div>
+  </div>
+  <div class="event-row">
+    <div class="event-num">4</div>
+    <div>
+      <span class="event-tag event-green">lead:new</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted only when a <strong>lead_score</strong> workflow succeeds. Payload: <code style="color:#a5f3fc">{ lead: { email, score, company, ... } }</code>. Leads page prepends the new scored lead instantly.</p>
+    </div>
+  </div>
+  <div class="event-row">
+    <div class="event-num">5</div>
+    <div>
+      <span class="event-tag event-blue">execution:completed</span>
+      <p style="margin:4px 0 0;font-size:13px">Final event after the engine finishes. Payload: <code style="color:#a5f3fc">{ workflowId, executionId, status, duration }</code>. Clears the loading state on the Trigger button.</p>
+    </div>
+  </div>
+  <div class="event-row">
+    <div class="event-num">6</div>
+    <div>
+      <span class="event-tag event-violet">metrics:update</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted alongside execution:completed. Dashboard listens and re-fetches the stats API to refresh all four KPI cards (Total Workflows, Success Rate, Active Runs, Leads Scored).</p>
+    </div>
+  </div>
+  <div class="event-row" style="border:none">
+    <div class="event-num">7</div>
+    <div>
+      <span class="event-tag event-green">workflow:status</span>
+      <p style="margin:4px 0 0;font-size:13px">Emitted when a workflow is paused or resumed via the PATCH endpoint. All tabs update the status badge immediately without a page refresh.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 4: DATABASE ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 04</div>
+  <h2>Database Schema</h2>
+  <p class="lead-text">
+    MongoDB Atlas stores all persistent data. Mongoose enforces schema validation, enum constraints, and typed references between collections. The four collections are interconnected through ObjectId references.
+  </p>
+
+  <img class="diagram" src="images/database_schema_1781169462680.png" alt="MongoDB Schema ERD" />
+  <p class="diagram-caption">Figure 3 — Entity Relationship Diagram showing the four MongoDB collections and their references.</p>
+
+  <h3>Collection Details</h3>
+  <table>
+    <tr><th>Collection</th><th>Key Fields</th><th>Purpose</th></tr>
+    <tr>
+      <td><strong style="color:#60a5fa">Workflow</strong></td>
+      <td><code style="color:#a5f3fc">name, type, status, runCount, successCount, errorCount, lastRun</code></td>
+      <td>Represents an automation definition. <code>type</code> is an enum: email_parse | lead_score | data_sync.</td>
+    </tr>
+    <tr>
+      <td><strong style="color:#34d399">Execution</strong></td>
+      <td><code style="color:#a5f3fc">workflowId (ref), status, steps[], startedAt, completedAt, duration, triggerType</code></td>
+      <td>A single run of a workflow. <code>steps[]</code> is an embedded array tracking each step's name, status, and duration.</td>
+    </tr>
+    <tr>
+      <td><strong style="color:#fbbf24">Log</strong></td>
+      <td><code style="color:#a5f3fc">workflowId (ref), executionId (ref), level, message, createdAt</code></td>
+      <td>Timestamped log entry produced during engine execution. <code>level</code> is info | warn | error | debug.</td>
+    </tr>
+    <tr>
+      <td><strong style="color:#a78bfa">Lead</strong></td>
+      <td><code style="color:#a5f3fc">email, name, company, score, factors{}, status, workflowId (ref)</code></td>
+      <td>AI-scored lead created by the lead_score workflow. Score is 0–100. <code>factors</code> breaks down scoring sub-components.</td>
+    </tr>
+  </table>
+
+  <h3>Aggregation Pipeline — Execution Stats</h3>
+  <p>The <code style="color:#a5f3fc">GET /api/executions/stats</code> endpoint uses a MongoDB aggregation to compute real-time success rate and average duration — showcasing advanced Mongoose beyond simple CRUD:</p>
+  <pre><span class="comment">// routes/executions.js</span>
+<span class="kw">const</span> totalExecutions = <span class="kw">await</span> Execution.<span class="fn">countDocuments</span>();
+<span class="kw">const</span> successExecutions = <span class="kw">await</span> Execution.<span class="fn">countDocuments</span>({ status: <span class="str">'success'</span> });
+<span class="kw">const</span> successRate = totalExecutions > <span class="num">0</span>
+  ? (successExecutions / totalExecutions) * <span class="num">100</span>
+  : <span class="num">0</span>;
+
+<span class="kw">const</span> aggResult = <span class="kw">await</span> Execution.<span class="fn">aggregate</span>([
+  { $match: { status: <span class="str">'success'</span>, duration: { $exists: <span class="kw">true</span> } } },
+  { $group: { _id: <span class="kw">null</span>, avgDuration: { $avg: <span class="str">'$duration'</span> } } }
+]);
+<span class="comment">// Returns: { totalExecutions, successRate, avgDuration }</span></pre>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 5: API REFERENCE ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 05</div>
+  <h2>REST API Reference</h2>
+  <p class="lead-text">
+    All endpoints return JSON. Base URL in development: <code style="color:#60a5fa">http://localhost:5001</code>. On Render: <code style="color:#60a5fa">https://your-app.onrender.com</code>.
+  </p>
+
+  <h3>Workflows</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/workflows</code></td><td>List all workflows with run stats</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/workflows/:id</code></td><td>Get a single workflow by ID</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/workflows/:id/trigger</code></td><td>Trigger a workflow execution (fires engine async, returns immediately)</td></tr>
+    <tr><td><span class="badge badge-patch">PATCH</span></td><td><code>/api/workflows/:id/status</code></td><td>Pause or resume a workflow. Body: <code>{ "status": "paused" }</code></td></tr>
+  </table>
+
+  <h3>Executions</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/executions</code></td><td>List recent executions. Query: <code>?workflowId=&limit=</code></td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/executions/stats</code></td><td>Aggregated stats: <code>{ totalExecutions, successRate, avgDuration }</code></td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/executions/:id</code></td><td>Get single execution with step breakdown</td></tr>
+  </table>
+
+  <h3>Webhooks (n8n Integration)</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Triggers</th></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/webhooks/n8n</code></td><td>Active <strong>data_sync</strong> workflow</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/webhooks/email</code></td><td>Active <strong>email_parse</strong> workflow</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td><code>/api/webhooks/crm</code></td><td>Active <strong>lead_score</strong> workflow</td></tr>
+  </table>
+
+  <h3>Logs & Leads</h3>
+  <table>
+    <tr><th>Method</th><th>Endpoint</th><th>Description</th></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/logs?limit=100</code></td><td>Recent log entries, newest first</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td><code>/api/leads</code></td><td>All scored leads, sorted by score descending</td></tr>
+  </table>
+
+  <h3>Example: Trigger a Workflow</h3>
+  <pre><span class="comment"># Using curl</span>
+curl -X POST http://localhost:5001/api/workflows/&lt;workflowId&gt;/trigger
+
+<span class="comment"># Response</span>
+{
+  <span class="str">"_id"</span>: <span class="str">"64abc..."</span>,
+  <span class="str">"workflowId"</span>: <span class="str">"64xyz..."</span>,
+  <span class="str">"status"</span>: <span class="str">"running"</span>,
+  <span class="str">"triggerType"</span>: <span class="str">"manual"</span>,
+  <span class="str">"startedAt"</span>: <span class="str">"2024-06-11T08:00:00Z"</span>
+}</pre>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 6: N8N INTEGRATION ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 06</div>
+  <h2>n8n Integration Guide</h2>
+  <p class="lead-text">
+    n8n is an open-source workflow automation tool. Our dashboard exposes three webhook endpoints that any n8n workflow can call using the built-in HTTP Request node. This makes our dashboard a real production-ready automation backend.
+  </p>
+
+  <img class="diagram" src="images/n8n_integration_1781169487711.png" alt="n8n Integration Diagram" />
+  <p class="diagram-caption">Figure 4 — n8n workflow calling our webhook endpoint, which triggers the dashboard's execution engine and broadcasts live updates via Socket.IO.</p>
+
+  <h3>How to Connect n8n to This Dashboard</h3>
+
+  <div class="card" style="margin-bottom:16px">
+    <h4 style="margin-top:0;color:#e2e8f0">Step 1 — Add an HTTP Request Node in n8n</h4>
+    <p style="margin-bottom:8px">In your n8n workflow canvas, add an <strong>HTTP Request</strong> node after your trigger. Configure it:</p>
+    <table style="margin:0">
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>Method</td><td><span class="badge badge-post">POST</span></td></tr>
+      <tr><td>URL</td><td><code>https://your-app.onrender.com/api/webhooks/n8n</code></td></tr>
+      <tr><td>Authentication</td><td>None (or add a custom header for security)</td></tr>
+      <tr><td>Body Type</td><td>JSON</td></tr>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:16px">
+    <h4 style="margin-top:0;color:#e2e8f0">Step 2 — Set the Request Body</h4>
+    <p>Pass any contextual data in the body. Our engine logs and stores the payload:</p>
+    <pre>{
+  <span class="str">"event"</span>: <span class="str">"new_contact_created"</span>,
+  <span class="str">"source"</span>: <span class="str">"HubSpot"</span>,
+  <span class="str">"data"</span>: {
+    <span class="str">"email"</span>: <span class="str">"lead@company.com"</span>,
+    <span class="str">"company"</span>: <span class="str">"Acme Corp"</span>,
+    <span class="str">"name"</span>: <span class="str">"Jane Smith"</span>
+  }
+}</pre>
+  </div>
+
+  <div class="card" style="margin-bottom:0">
+    <h4 style="margin-top:0;color:#e2e8f0">Step 3 — What Happens Next (Automatic)</h4>
+    <p style="margin-bottom:0">Our backend webhook handler automatically: finds the first active workflow of the matching type → creates a new Execution record in MongoDB → runs the multi-step simulation engine → emits Socket.IO events → live dashboard updates appear in all open browser tabs within milliseconds.</p>
+  </div>
+
+  <h3>Webhook Source → Workflow Type Mapping</h3>
+  <table>
+    <tr><th>Webhook URL</th><th>Workflow Type</th><th>What it simulates</th></tr>
+    <tr><td><code>/api/webhooks/n8n</code></td><td>data_sync</td><td>Connect to source API → Fetch delta records → Transform schema → Upsert to DB</td></tr>
+    <tr><td><code>/api/webhooks/email</code></td><td>email_parse</td><td>Connect to inbox → Fetch unread emails → Extract headers → Classify intent (AI)</td></tr>
+    <tr><td><code>/api/webhooks/crm</code></td><td>lead_score</td><td>Fetch lead data → Enrich company info → Calculate engagement score → Update CRM</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 7: WORKFLOW ENGINE ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 07</div>
+  <h2>Workflow Execution Engine</h2>
+  <p class="lead-text">
+    The engine (<code style="color:#60a5fa">backend/services/workflowEngine.js</code>) is the core of the backend. It runs asynchronously in the background after a workflow is triggered, executing each step sequentially, persisting results to MongoDB, and broadcasting live events to all connected clients.
+  </p>
+
+  <h3>Email Parse Workflow — 4 Steps</h3>
+  <div class="step-grid">
+    <div class="step-card"><div class="step-icon">📬</div><h4>1. Connect to Inbox</h4><p>Simulates authenticating to an IMAP/Gmail inbox. 1000ms delay.</p></div>
+    <div class="step-card"><div class="step-icon">📥</div><h4>2. Fetch Unread Emails</h4><p>Simulates pulling unread messages. 1500ms delay.</p></div>
+    <div class="step-card"><div class="step-icon">🔍</div><h4>3. Extract Headers & Body</h4><p>Simulates parsing email metadata and content. 800ms delay.</p></div>
+    <div class="step-card"><div class="step-icon">🧠</div><h4>4. Classify Intent (AI)</h4><p>Simulates an AI intent classification call. 2000ms delay.</p></div>
+  </div>
+
+  <h3>Lead Score Workflow — 4 Steps</h3>
+  <div class="step-grid">
+    <div class="step-card"><div class="step-icon">👤</div><h4>1. Fetch Lead Data</h4><p>Looks up lead profile from CRM. 800ms delay.</p></div>
+    <div class="step-card"><div class="step-icon">🏢</div><h4>2. Enrich Company Info</h4><p>Calls Clearbit/Apollo for company size, industry. 1200ms.</p></div>
+    <div class="step-card"><div class="step-icon">📊</div><h4>3. Calculate Engagement Score</h4><p>Computes a 0–100 score from weighted factors. 1000ms.</p></div>
+    <div class="step-card"><div class="step-icon">✅</div><h4>4. Update CRM</h4><p>Writes score back to HubSpot/Salesforce. 1500ms. Creates Lead document in MongoDB.</p></div>
+  </div>
+
+  <h3>Data Sync Workflow — 4 Steps</h3>
+  <div class="step-grid">
+    <div class="step-card"><div class="step-icon">🔌</div><h4>1. Connect to Source API</h4><p>Authenticates to the source system (e.g. HubSpot). 1000ms.</p></div>
+    <div class="step-card"><div class="step-icon">📦</div><h4>2. Fetch Delta Records</h4><p>Retrieves only changed records since last sync. 2000ms.</p></div>
+    <div class="step-card"><div class="step-icon">🔄</div><h4>3. Transform Schema</h4><p>Maps source fields to destination schema. 1500ms.</p></div>
+    <div class="step-card"><div class="step-icon">💾</div><h4>4. Upsert to Destination DB</h4><p>Writes transformed records to PostgreSQL/Mongo. 2500ms.</p></div>
+  </div>
+
+  <h3>Error Simulation</h3>
+  <p>Each step has a <strong>5% random failure probability</strong> to demonstrate realistic error handling. When a step fails, the engine: sets the step status to <code style="color:#a5f3fc">error</code>, saves to MongoDB, emits a <code style="color:#a5f3fc">log:new</code> event with level <code style="color:#ef4444">error</code>, and marks the execution as failed. The dashboard's red indicators update in real time.</p>
+</div>
+</div>
+
+<!-- ══════════════ SECTION 8: DEPLOYMENT ══════════════ -->
+<div class="page">
+<div class="container">
+  <div class="section-label">Section 08</div>
+  <h2>Deployment Guide</h2>
+  <p class="lead-text">
+    The backend is configured for one-click deployment on Render via the <code style="color:#60a5fa">render.yaml</code> file. The Next.js frontend deploys to Vercel by simply connecting the GitHub repository.
+  </p>
+
+  <div class="deploy-grid">
+    <div class="card card-emerald">
+      <h4 style="margin-top:0;color:#34d399">🟢 Backend → Render</h4>
+      <p style="font-size:13px">1. Push repo to GitHub<br/>2. Create new Web Service on Render<br/>3. Connect GitHub repo<br/>4. Render auto-detects <code>render.yaml</code><br/>5. Add <code>MONGODB_URI</code> environment variable<br/>6. Deploy → live in ~2 minutes</p>
+    </div>
+    <div class="card card-blue">
+      <h4 style="margin-top:0;color:#60a5fa">🔵 Frontend → Vercel</h4>
+      <p style="font-size:13px">1. Push repo to GitHub<br/>2. Import project on Vercel<br/>3. Set root directory to <code>frontend/</code><br/>4. Add env var: <code>NEXT_PUBLIC_API_URL=https://your-render-url.onrender.com</code><br/>5. Deploy → live in ~1 minute</p>
+    </div>
+  </div>
+
+  <h3>render.yaml Configuration</h3>
+  <pre><span class="comment"># backend/render.yaml</span>
+services:
+  - type: web
+    name: automation-dashboard-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: <span class="num">10000</span>
+      - key: CORS_ORIGIN
+        value: <span class="str">"*"</span>
+      - key: MONGODB_URI
+        sync: <span class="kw">false</span>  <span class="comment"># Set manually in Render dashboard</span></pre>
+
+  <h3>Environment Variables</h3>
+  <table>
+    <tr><th>Variable</th><th>Where</th><th>Value</th></tr>
+    <tr><td><code>MONGODB_URI</code></td><td>Render (backend)</td><td>Your MongoDB Atlas connection string</td></tr>
+    <tr><td><code>PORT</code></td><td>Render (backend)</td><td><code>10000</code> (Render default)</td></tr>
+    <tr><td><code>CORS_ORIGIN</code></td><td>Render (backend)</td><td>Your Vercel frontend URL</td></tr>
+    <tr><td><code>NEXT_PUBLIC_API_URL</code></td><td>Vercel (frontend)</td><td>Your Render backend URL</td></tr>
+  </table>
+
+  <h3>MongoDB Atlas Setup</h3>
+  <p>1. Create a free cluster on <strong>mongodb.com/atlas</strong>.</p>
+  <p>2. Create a database user with read/write access.</p>
+  <p>3. Whitelist <code>0.0.0.0/0</code> in Network Access (allows Render's dynamic IPs).</p>
+  <p>4. Copy the connection string: <code style="color:#a5f3fc">mongodb+srv://user:pass@cluster.mongodb.net/automation-dashboard</code></p>
+  <p>5. Paste into Render as the <code>MONGODB_URI</code> env var. Run <code>npm run seed</code> to populate initial data.</p>
+
+  <hr/>
+  <p style="text-align:center;color:#475569;font-size:13px">
+    AI Workflow Automation Dashboard &nbsp;·&nbsp; Full-Stack Capstone Project &nbsp;·&nbsp; 
+    Node.js · Next.js · MongoDB · Socket.IO · n8n
+  </p>
+</div>
+</div>
+
+</body>
+</html>

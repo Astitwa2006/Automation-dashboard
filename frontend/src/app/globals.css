@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #0C0C0E;
+  --color-carbon: #141416;
+  --color-carbon-light: #1A1A1E;
+  --color-divider: #1E1E22;
+  --color-divider-light: #2A2A30;
+  --color-phosphor: #00E599;
+  --color-phosphor-dim: #00E59940;
+  --color-amber: #FFB224;
+  --color-amber-dim: #FFB22430;
+  --color-err: #FF4D4D;
+  --color-err-dim: #FF4D4D30;
+  --color-text: #E8E8E4;
+  --color-text-mid: #9B9BA0;
+  --color-text-dim: #6B6B73;
+  --color-text-ghost: #3A3A42;
+}
+
+@layer base {
+  body {
+    background-color: #0C0C0E;
+    color: #E8E8E4;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  /* ── Card system ── */
+  .card {
+    background-color: #141416;
+    border: 1px solid #1E1E22;
+    border-radius: 8px;
+  }
+
+  .card-hover {
+    background-color: #141416;
+    border: 1px solid #1E1E22;
+    border-radius: 8px;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .card-hover:hover {
+    border-color: #2A2A30;
+    background-color: #1A1A1E;
+  }
+
+  /* ── Accent bar cards ── */
+  .accent-green { border-left: 3px solid #00E599; }
+  .accent-amber { border-left: 3px solid #FFB224; }
+  .accent-red { border-left: 3px solid #FF4D4D; }
+
+  /* ── Labels ── */
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6B6B73;
+  }
+
+  /* ── Monospaced data ── */
+  .data-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    color: #0C0C0E;
+    background-color: #00E599;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary:hover { background-color: #00CC88; }
+  .btn-primary:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    color: #9B9BA0;
+    background-color: transparent;
+    border: 1px solid #2A2A30;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .btn-secondary:hover {
+    border-color: #6B6B73;
+    color: #E8E8E4;
+  }
+
+  /* ── Terminal surface ── */
+  .terminal-surface {
+    background-color: #09090B;
+    border: 1px solid #1E1E22;
+    border-radius: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    position: relative;
+    overflow: hidden;
+  }
+  .terminal-surface::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.008) 2px,
+      rgba(255, 255, 255, 0.008) 4px
+    );
+    pointer-events: none;
+  }
+}
+
+/* ── Animations ── */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes data-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-cursor { animation: cursor-blink 1s step-end infinite; }
+.animate-data-pulse { animation: data-pulse 2s ease-in-out infinite; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2A2A30;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3A3A42;
+}
+
+/* ── Selection ── */
+::selection {
+  background: #00E59940;
+  color: #E8E8E4;
+}

@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Testing
+e2e-tests/node_modules/
+e2e-tests/test-results/
+e2e-tests/playwright-report/
+e2e-tests/blob-report/
+e2e-tests/.playwright/
+coverage/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# IDE & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Temp / Scratch files
+test-err.js
+frontend_backup/
+.agents/
+*.log
